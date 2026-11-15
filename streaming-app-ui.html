@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AdiXtream - Streaming App UI</title>
+<style>
+/* ========================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ======================================== */
+:root {
+  /* Colors - Dark Theme (Streaming Standard) */
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #262626;
+  --bg-card: #1e1e1e;
+  --bg-card-hover: #2a2a2a;
+  --bg-modal: rgba(0, 0, 0, 0.9);
+  
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #737373;
+  --text-accent: #e50914; /* Netflix red / Brand color */
+  --text-accent-hover: #f40612;
+  
+  --border-color: #333333;
+  --border-focus: #e50914;
+  
+  /* Spacing Scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.6);
+  
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', monospace;
+  
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+  --text-5xl: 3rem;      /* 48px */
+  
+  /* Z-index Scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal-backdrop: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+  
+  /* Layout */
+  --header-height: 64px;
+  --sidebar-width: 280px;
+  --sidebar-collapsed: 72px;
+}
+
+/* TV (10ft UI) adjustments */
+@media (min-width: 1920px) and (pointer: coarse) {
+  :root {
+    --text-xs: 1.25rem;   /* 20px */
+    --text-sm: 1.5rem;    /* 24px */
+    --text-base: 1.75rem; /* 28px */
+    --text-lg: 2rem;      /* 32px */
+    --text-xl: 2.25rem;   /* 36px */
+    --text-2xl: 2.75rem;  /* 44px */
+    --text-3xl: 3.5rem;   /* 56px */
+    --text-4xl: 4.5rem;   /* 72px */
+    --text-5xl: 6rem;     /* 96px */
+    
+    --space-xs: 8px;
+    --space-sm: 16px;
+    --space-md: 24px;
+    --space-lg: 36px;
+    --space-xl: 48px;
+    --space-2xl: 72px;
+    --space-3xl: 96px;
+    
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    
+    --header-height: 100px;
+    --sidebar-width: 400px;
+  }
+}
+
+/* ========================================
+   RESET & BASE
+   ======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ========================================
+   LAYOUT COMPONENTS
+   ======================================== */
+.app {
+  display: grid;
+  grid-template-rows: var(--header-height) 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-lg);
+  background: rgba(13, 13, 13, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  height: var(--header-height);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: var(--text-xl);
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--text-accent), #ff4b4b);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  font-weight: 800;
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.nav-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.nav-btn.active {
+  color: var(--text-accent);
+  background: rgba(229, 9, 20, 0.1);
+}
+
+.nav-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.search-box {
+  position: relative;
+  display: none;
+}
+
+.search-box input {
+  width: 280px;
+  padding: var(--space-sm) var(--space-md);
+  padding-left: 40px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+}
+
+.search-box input:focus {
+  width: 360px;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+}
+
+.search-box input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-box svg {
+  position: absolute;
+  left: var(--space-md);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--bg-tertiary);
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.icon-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+.icon-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--text-accent), #ff4b4b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.user-avatar:hover {
+  border-color: var(--text-accent);
+  transform: scale(1.05);
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: var(--space-md);
+  gap: var(--space-lg);
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sidebar-title {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  padding: 0 var(--space-sm);
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-item:hover,
+.sidebar-item.active {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.sidebar-item.active {
+  background: rgba(229, 9, 20, 0.15);
+  color: var(--text-accent);
+}
+
+.sidebar-item svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: var(--space-xs) 0;
+}
+
+/* Main Content */
+.main {
+  overflow-y: auto;
+  padding: var(--space-xl);
+  background: var(--bg-primary);
+}
+
+/* ========================================
+   COMPONENTS
+   ======================================== */
+
+/* Section Header */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.section-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.section-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.section-link:hover {
+  color: var(--text-accent);
+}
+
+/* Hero Banner */
+.hero {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: var(--space-2xl);
+  aspect-ratio: 16 / 9;
+  min-height: 360px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    var(--bg-primary) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-2xl);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-md);
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  font-size: var(--text-sm);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--text-accent);
+  color: white;
+  font-weight: 600;
+  font-size: var(--text-xs);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+
+.hero-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.hero-genres {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.hero-genre {
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.hero-title {
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  max-width: 800px;
+}
+
+.hero-description {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 640px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--text-accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--text-accent-hover);
+  transform: scale(1.02);
+}
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--text-muted);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-tertiary);
+}
+
+.btn-icon {
+  padding: var(--space-md);
+}
+
+.btn-lg {
+  padding: var(--space-lg) var(--space-2xl);
+  font-size: var(--text-lg);
+}
+
+.btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Content Grid */
+.content-grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .content-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .content-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .content-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 1441px) {
+  .content-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+/* Movie Card */
+.movie-card {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  aspect-ratio: 2 / 3;
+}
+
+.movie-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+  z-index: 10;
+}
+
+.movie-card:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.movie-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.movie-card:hover .movie-poster {
+  transform: scale(1.05);
+}
+
+.movie-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.9) 100%);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-md);
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+
+.movie-info {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all var(--transition-base);
+}
+
+.movie-card:hover .movie-info {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.movie-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.movie-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #ffd700;
+  font-weight: 600;
+  font-size: var(--text-xs);
+}
+
+.movie-year {
+  color: var(--text-muted);
+}
+
+.movie-actions-overlay {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+/* Row Container */
+.row {
+  margin-bottom: var(--space-2xl);
+}
+
+.row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.row-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+/* Carousel for TV/Large screens */
+.carousel {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-md);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 180px;
+}
+
+@media (min-width: 1024px) {
+  .carousel-item {
+    width: 220px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .carousel-item {
+    width: 300px;
+  }
+}
+
+/* Player Page */
+.player-page {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  background: var(--bg-primary);
+}
+
+.player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-xl);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.player-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.player-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.player-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.player-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-xl);
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.9));
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.player-container:hover .player-controls,
+.player-controls:focus-within {
+  opacity: 1;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--text-accent);
+  border-radius: var(--radius-full);
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+.progress-bar:hover .progress-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+}
+
+.time {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  min-width: 50px;
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.control-btn:hover {
+  background: var(--bg-tertiary);
+  transform: scale(1.1);
+}
+
+.control-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.control-btn.play-pause {
+  width: 56px;
+  height: 56px;
+  background: white;
+  color: black;
+}
+
+.control-btn.play-pause:hover {
+  transform: scale(1.15);
+}
+
+.settings-panel {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  min-width: 200px;
+  box-shadow: var(--shadow-xl);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all var(--transition-fast);
+  z-index: var(--z-dropdown);
+}
+
+.settings-panel.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  cursor: pointer;
+}
+
+.setting-item:hover {
+  color: var(--text-accent);
+}
+
+.setting-label {
+  font-size: var(--text-sm);
+}
+
+.setting-value {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* Detail Page */
+.detail-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.detail-header {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+}
+
+@media (max-width: 768px) {
+  .detail-header {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+.detail-poster {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.detail-title {
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+}
+
+.detail-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.detail-actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  margin-top: var(--space-md);
+}
+
+.detail-description {
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 800px;
+}
+
+.detail-seasons {
+  margin-top: var(--space-2xl);
+}
+
+.season-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+  overflow-x: auto;
+  padding-bottom: var(--space-sm);
+}
+
+.season-tab {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.season-tab:hover {
+  color: var(--text-primary);
+}
+
+.season-tab.active {
+  background: var(--text-accent);
+  color: white;
+}
+
+.episode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-md);
+}
+
+.episode-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.episode-card:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.episode-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.episode-info {
+  padding: var(--space-md);
+}
+
+.episode-num {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.episode-title {
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+/* Search Page */
+.search-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.search-input-wrapper {
+  position: relative;
+  margin-bottom: var(--space-2xl);
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--space-lg) var(--space-xl);
+  padding-left: 56px;
+  font-size: var(--text-xl);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+}
+
+.search-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-icon {
+  position: absolute;
+  left: var(--space-lg);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  color: var(--text-muted);
+}
+
+.search-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-md);
+}
+
+.search-empty {
+  text-align: center;
+  padding: var(--space-3xl);
+  color: var(--text-muted);
+}
+
+/* Settings Page */
+.settings-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settings-group {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+}
+
+.settings-group-title {
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.setting-name {
+  font-weight: 500;
+}
+
+.setting-desc {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.toggle {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.toggle.active {
+  background: var(--text-accent);
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.toggle.active::after {
+  transform: translateX(24px);
+}
+
+.version {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-modal);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-modal-backdrop);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-base);
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: var(--z-modal);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-base);
+}
+
+.modal-backdrop.open .modal {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.modal-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* Toast */
+.toast-container {
+  position: fixed;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  z-index: var(--z-toast);
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toast-success {
+  border-left: 4px solid #22c55e;
+}
+
+.toast-error {
+  border-left: 4px solid #ef4444;
+}
+
+.toast-info {
+  border-left: 4px solid var(--text-accent);
+}
+
+/* Skeleton Loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 25%,
+    var(--bg-card) 50%,
+    var(--bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Responsive Sidebar Toggle */
+.sidebar-toggle {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .sidebar-toggle {
+    display: flex;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: var(--sidebar-width);
+    z-index: var(--z-modal);
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+    box-shadow: var(--shadow-xl);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .app {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: calc(var(--z-modal) - 1);
+  }
+  
+  .sidebar-backdrop.open {
+    display: block;
+  }
+}
+
+/* TV Optimizations */
+@media (min-width: 1920px) and (pointer: coarse) {
+  .app {
+    grid-template-columns: var(--sidebar-width) 1fr;
+  }
+  
+  .sidebar {
+    padding: var(--space-xl);
+  }
+  
+  .main {
+    padding: var(--space-2xl);
+  }
+  
+  .hero {
+    min-height: 500px;
+  }
+  
+  .content-grid {
+    gap: var(--space-lg);
+  }
+  
+  .btn {
+    padding: var(--space-lg) var(--space-2xl);
+  }
+  
+  .control-btn {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .control-btn.play-pause {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .movie-card {
+    aspect-ratio: 2 / 3;
+  }
+  
+  .movie-card:hover {
+    transform: translateY(-16px) scale(1.04);
+  }
+}
+
+/* Print styles */
+@media print {
+  .header, .sidebar, .hero-actions, .player-controls {
+    display: none !important;
+  }
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar Backdrop for Mobile -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+  
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-section" aria-label="Main Navigation">
+      <a href="#" class="sidebar-item active" data-page="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Beranda
+      </a>
+      <a href="#" class="sidebar-item" data-page="movies">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="2.18"/>
+          <line x1="7" y1="2" x2="7" y2="22"/>
+          <line x1="17" y1="2" x2="17" y2="22"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <line x1="12" y1="2" x2="12" y2="22"/>
+        </svg>
+        Film
+      </a>
+      <a href="#" class="sidebar-item" data-page="series">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v10"/>
+          <path d="M3 15v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V15"/>
+          <line x1="12" y1="9" x2="12" y2="15"/>
+          <line x1="9" y1="12" x2="15" y2="12"/>
+        </svg>
+        Series
+      </a>
+      <a href="#" class="sidebar-item" data-page="anime">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        Anime
+      </a>
+      <a href="#" class="sidebar-item" data-page="drakor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        Drakor
+      </a>
+      <a href="#" class="sidebar-item" data-page="live">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8"/>
+          <path d="M12 17v4"/>
+        </svg>
+        Live TV
+      </a>
+    </nav>
+    
+    <div class="sidebar-divider"></div>
+    
+    <nav class="sidebar-section" aria-label="Categories">
+      <h3 class="sidebar-title">Kategori</h3>
+      <a href="#" class="sidebar-item">Action</a>
+      <a href="#" class="sidebar-item">Drama</a>
+      <a href="#" class="sidebar-item">Comedy</a>
+      <a href="#" class="sidebar-item">Thriller</a>
+      <a href="#" class="sidebar-item">Horror</a>
+      <a href="#" class="sidebar-item">Romance</a>
+      <a href="#" class="sidebar-item">Sci-Fi</a>
+      <a href="#" class="sidebar-item">Fantasy</a>
+    </nav>
+    
+    <div class="sidebar-divider"></div>
+    
+    <nav class="sidebar-section" aria-label="Account">
+      <h3 class="sidebar-title">Akun</h3>
+      <a href="#" class="sidebar-item" data-page="continue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="23 7 16 12 23 17 23 7"/>
+          <rect x="1" y="5" width="15" height="14" rx="2"/>
+        </svg>
+        Lanjutkan Menonton
+      </a>
+      <a href="#" class="sidebar-item" data-page="watchlist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        Watchlist
+      </a>
+      <a href="#" class="sidebar-item" data-page="downloads">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download
+      </a>
+      <a href="#" class="sidebar-item" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Pengaturan
+      </a>
+    </nav>
+  </aside>
+  
+  <!-- Header -->
+  <header class="header" role="banner">
+    <div class="header-left">
+      <button class="sidebar-toggle icon-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <a href="#" class="logo">
+        <span class="logo-icon">A</span>
+        <span>AdiXtream</span>
+      </a>
+      <nav class="nav" role="navigation" aria-label="Main categories">
+        <a href="#" class="nav-btn active" data-page="home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          Beranda
+        </a>
+        <a href="#" class="nav-btn" data-page="movies">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="2.18"/>
+            <line x1="7" y1="2" x2="7" y2="22"/>
+            <line x1="17" y1="2" x2="17" y2="22"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <line x1="12" y1="2" x2="12" y2="22"/>
+          </svg>
+          Film
+        </a>
+        <a href="#" class="nav-btn" data-page="series">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v10"/>
+            <path d="M3 15v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V15"/>
+          </svg>
+          Series
+        </a>
+        <a href="#" class="nav-btn" data-page="anime">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          Anime
+        </a>
+        <a href="#" class="nav-btn" data-page="drakor">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          Drakor
+        </a>
+        <a href="#" class="nav-btn" data-page="live">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <path d="M8 21h8"/>
+            <path d="M12 17v4"/>
+          </svg>
+          Live
+        </a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="search-box" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="search" placeholder="Cari film, series, anime..." aria-label="Cari konten">
+      </div>
+      <button class="icon-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </button>
+      <button class="icon-btn" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+      <div class="user-avatar" aria-label="User profile">A</div>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main class="main" id="mainContent" role="main">
+    <!-- Hero Banner -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" style="background-image: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);"></div>
+      <div class="hero-content">
+        <div class="hero-meta">
+          <span class="hero-badge">Baru</span>
+          <div class="hero-rating">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            9.2
+          </div>
+          <div class="hero-genres">
+            <span class="hero-genre">Action</span>
+            <span class="hero-genre">Sci-Fi</span>
+            <span class="hero-genre">Adventure</span>
+          </div>
+        </div>
+        <h1 id="hero-title" class="hero-title">Avatar: The Way of Water</h1>
+        <p class="hero-description">Jake Sully hidup dengan keluarga barunya di planet Pandora. Ancaman baru muncul dan Jake harus bekerja sama dengan Neytiri untuk melindungi keluarga mereka.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Putar Sekarang
+          </button>
+          <button class="btn btn-secondary btn-lg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/></svg>
+            Download
+          </button>
+          <button class="btn btn-ghost btn-lg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Watchlist
+          </button>
+          <button class="btn btn-ghost btn-lg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Info
+          </button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Continue Watching -->
+    <section class="row" aria-labelledby="continue-title">
+      <header class="row-header">
+        <h2 id="continue-title" class="row-title">Lanjutkan Menonton</h2>
+        <a href="#" class="section-link">Lihat Semua <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+      </header>
+      <div class="content-grid" role="list">
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/avatar2/300/450.jpg" alt="Avatar: The Way of Water" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Avatar: The Way of Water</h3>
+              <div class="movie-meta">
+                <div class="movie-rating">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  9.2
+                </div>
+                <span class="movie-year">2022</span>
+              </div>
+              <div class="movie-actions-overlay">
+                <button class="btn btn-primary btn-icon" aria-label="Putar"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+                <button class="btn btn-secondary btn-icon" aria-label="Episode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </article>
+        
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/stranger/300/450.jpg" alt="Stranger Things" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Stranger Things</h3>
+              <div class="movie-meta">
+                <div class="movie-rating">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  8.7
+                </div>
+                <span class="movie-year">2016</span>
+              </div>
+              <div class="movie-actions-overlay">
+                <button class="btn btn-primary btn-icon" aria-label="Putar"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+                <button class="btn btn-secondary btn-icon" aria-label="Episode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </article>
+        
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/wednesday/300/450.jpg" alt="Wednesday" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Wednesday</h3>
+              <div class="movie-meta">
+                <div class="movie-rating">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  8.1
+                </div>
+                <span class="movie-year">2022</span>
+              </div>
+              <div class="movie-actions-overlay">
+                <button class="btn btn-primary btn-icon" aria-label="Putar"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+                <button class="btn btn-secondary btn-icon" aria-label="Episode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </article>
+        
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/squid/300/450.jpg" alt="Squid Game" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Squid Game</h3>
+              <div class="movie-meta">
+                <div class="movie-rating">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  8.0
+                </div>
+                <span class="movie-year">2021</span>
+              </div>
+              <div class="movie-actions-overlay">
+                <button class="btn btn-primary btn-icon" aria-label="Putar"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+                <button class="btn btn-secondary btn-icon" aria-label="Episode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    
+    <!-- Trending Movies -->
+    <section class="row" aria-labelledby="trending-title">
+      <header class="row-header">
+        <h2 id="trending-title" class="row-title">Trending Film</h2>
+        <a href="#" class="section-link">Lihat Semua <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+      </header>
+      <div class="content-grid" role="list">
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/oppenheimer/300/450.jpg" alt="Oppenheimer" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Oppenheimer</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.3</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/barbie/300/450.jpg" alt="Barbie" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Barbie</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 7.1</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/mission/300/450.jpg" alt="Mission Impossible" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Mission: Impossible</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 7.8</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/johnwick/300/450.jpg" alt="John Wick 4" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">John Wick: Chapter 4</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.1</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/guardians/300/450.jpg" alt="Guardians of the Galaxy Vol. 3" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Guardians of the Galaxy Vol. 3</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.2</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/spider/300/450.jpg" alt="Spider-Man: Across the Spider-Verse" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Spider-Man: Across the Spider-Verse</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.6</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/supermario/300/450.jpg" alt="The Super Mario Bros. Movie" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">The Super Mario Bros. Movie</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 7.2</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/elemental/300/450.jpg" alt="Elemental" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Elemental</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 7.5</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    
+    <!-- Popular Series -->
+    <section class="row" aria-labelledby="series-title">
+      <header class="row-header">
+        <h2 id="series-title" class="row-title">Series Populer</h2>
+        <a href="#" class="section-link">Lihat Semua <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+      </header>
+      <div class="content-grid" role="list">
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/thelast/300/450.jpg" alt="The Last of Us" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">The Last of Us</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.7</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/house/300/450.jpg" alt="House of the Dragon" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">House of the Dragon</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.5</div>
+                <span class="movie-year">2022</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/theboys/300/450.jpg" alt="The Boys" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">The Boys</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.7</div>
+                <span class="movie-year">2019</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/severance/300/450.jpg" alt="Severance" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Severance</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.7</div>
+                <span class="movie-year">2022</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    
+    <!-- Drakor Section -->
+    <section class="row" aria-labelledby="drakor-title">
+      <header class="row-header">
+        <h2 id="drakor-title" class="row-title">Drakor Terbaru</h2>
+        <a href="#" class="section-link">Lihat Semua <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+      </header>
+      <div class="content-grid" role="list">
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/queenoftears/300/450.jpg" alt="Queen of Tears" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Queen of Tears</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.8</div>
+                <span class="movie-year">2024</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/lovelyrunner/300/450.jpg" alt="Lovely Runner" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Lovely Runner</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.9</div>
+                <span class="movie-year">2024</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/marry/300/450.jpg" alt="Marry My Husband" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Marry My Husband</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.5</div>
+                <span class="movie-year">2024</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/doctor/300/450.jpg" alt="Doctor Slump" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Doctor Slump</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.2</div>
+                <span class="movie-year">2024</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    
+    <!-- Anime Section -->
+    <section class="row" aria-labelledby="anime-title">
+      <header class="row-header">
+        <h2 id="anime-title" class="row-title">Anime Populer</h2>
+        <a href="#" class="section-link">Lihat Semua <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+      </header>
+      <div class="content-grid" role="list">
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/solo/300/450.jpg" alt="Solo Leveling" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Solo Leveling</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.7</div>
+                <span class="movie-year">2024</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/frieren/300/450.jpg" alt="Frieren" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Frieren: Beyond Journey's End</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 9.1</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/jjk/300/450.jpg" alt="Jujutsu Kaisen" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Jujutsu Kaisen Season 2</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.8</div>
+                <span class="movie-year">2023</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="movie-card" role="listitem" tabindex="0">
+          <img class="movie-poster" src="https://picsum.photos/seed/demon/300/450.jpg" alt="Demon Slayer" loading="lazy">
+          <div class="movie-overlay">
+            <div class="movie-info">
+              <h3 class="movie-title">Demon Slayer: Kimetsu no Yaiba</h3>
+              <div class="movie-meta">
+                <div class="movie-rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 8.6</div>
+                <span class="movie-year">2019</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" id="modalBackdrop" tabindex="-1" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <header class="modal-header">
+      <h3 id="modalTitle" class="modal-title">Tambah ke Watchlist</h3>
+      <button class="modal-close" aria-label="Tutup modal">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </header>
+    <div class="modal-body">
+      <p>Apakah Anda ingin menambah "Avatar: The Way of Water" ke watchlist?</p>
+      <div style="margin-top: var(--space-lg); display: flex; gap: var(--space-md); justify-content: flex-end;">
+        <button class="btn btn-secondary" id="modalCancel">Batal</button>
+        <button class="btn btn-primary" id="modalConfirm">Tambah</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========================================
+   JAVASCRIPT - UI Interactions
+   ======================================== */
+
+// State
+const state = {
+  sidebarOpen: false,
+  currentPage: 'home',
+  toastId: 0
+};
+
+// DOM Elements
+const sidebar = document.getElementById('sidebar');
+const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+const sidebarToggle = document.getElementById('sidebarToggle');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const toastContainer = document.getElementById('toastContainer');
+const mainContent = document.getElementById('mainContent');
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  initSidebar();
+  initNavigation();
+  initModals();
+  initToasts();
+  initMovieCards();
+  initSearch();
+  initKeyboardNavigation();
+  handleResize();
+  window.addEventListener('resize', handleResize);
+});
+
+/* Sidebar */
+function initSidebar() {
+  sidebarToggle?.addEventListener('click', toggleSidebar);
+  sidebarBackdrop?.addEventListener('click', closeSidebar);
+  
+  // Close sidebar on navigation click (mobile)
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) closeSidebar();
+    });
+  });
+}
+
+function toggleSidebar() {
+  state.sidebarOpen = !state.sidebarOpen;
+  sidebar.classList.toggle('open', state.sidebarOpen);
+  sidebarBackdrop?.classList.toggle('open', state.sidebarOpen);
+  sidebarToggle?.setAttribute('aria-expanded', state.sidebarOpen);
+}
+
+function closeSidebar() {
+  state.sidebarOpen = false;
+  sidebar.classList.remove('open');
+  sidebarBackdrop?.classList.remove('open');
+  sidebarToggle?.setAttribute('aria-expanded', 'false');
+}
+
+/* Navigation */
+function initNavigation() {
+  // Header nav
+  document.querySelectorAll('.nav-btn, .sidebar-item').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const page = btn.dataset.page;
+      if (page) navigateTo(page);
+    });
+  });
+  
+  // Movie card clicks
+  document.querySelectorAll('.movie-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (!e.target.closest('.btn, .icon-btn')) {
+        showToast('Membuka detail film...', 'info');
+      }
+    });
+    
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  });
+}
+
+function navigateTo(page) {
+  // Update active states
+  document.querySelectorAll('.nav-btn, .sidebar-item').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === page);
+  });
+  
+  state.currentPage = page;
+  showToast(`Navigasi ke ${page}`, 'info');
+  
+  // Scroll to top
+  mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* Modals */
+function initModals() {
+  document.querySelectorAll('[data-modal]').forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal(trigger.dataset.modal);
+    });
+  });
+  
+  // Close on backdrop click
+  modalBackdrop?.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) closeModal();
+  });
+  
+  // Close buttons
+  document.querySelectorAll('.modal-close, #modalCancel').forEach(btn => {
+    btn.addEventListener('click', closeModal);
+  });
+  
+  // Confirm button
+  document.getElementById('modalConfirm')?.addEventListener('click', () => {
+    showToast('Ditambahkan ke watchlist!', 'success');
+    closeModal();
+  });
+}
+
+function openModal(modalId) {
+  modalBackdrop?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Focus first focusable element
+  setTimeout(() => {
+    modalBackdrop?.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')?.focus();
+  }, 100);
+}
+
+function closeModal() {
+  modalBackdrop?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* Toasts */
+function initToasts() {
+  // Demo toast on load
+  setTimeout(() => {
+    showToast('Selamat datang di AdiXtream!', 'success');
+  }, 1000);
+}
+
+function showToast(message, type = 'info', duration = 3000) {
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'polite');
+  
+  const icons = {
+    success: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+    error: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+    info: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  };
+  
+  toast.innerHTML = `${icons[type] || icons.info}<span>${message}</span>`;
+  toastContainer.appendChild(toast);
+  
+  // Auto remove
+  setTimeout(() => {
+    toast.style.animation = 'slideIn 0.3s ease reverse';
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+}
+
+/* Movie Cards */
+function initMovieCards() {
+  document.querySelectorAll('.movie-card').forEach(card => {
+    // Play button
+    const playBtn = card.querySelector('.btn-primary');
+    if (playBtn) {
+      playBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const title = card.querySelector('.movie-title')?.textContent || 'Film';
+        showModalPlayer(title);
+      });
+    }
+    
+    // Episode button
+    const epBtn = card.querySelector('.btn-secondary');
+    if (epBtn) {
+      epBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showToast('Membuka daftar episode...', 'info');
+      });
+    }
+  });
+}
+
+function showModalPlayer(title) {
+  const modalHtml = `
+    <div class="modal-backdrop open" id="playerModal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: flex; align-items: center; justify-content: center;">
+      <div style="width: 90%; max-width: 1200px; aspect-ratio: 16/9; background: #000; border-radius: var(--radius-lg); overflow: hidden; position: relative;">
+        <div style="position: absolute; top: var(--space-md); right: var(--space-md); z-index: 10;">
+          <button class="icon-btn" onclick="document.getElementById('playerModal').remove()" aria-label="Tutup player">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <video class="player-video" controls style="width: 100%; height: 100%;" poster="https://picsum.photos/seed/avatar2/1280/720.jpg">
+          <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+          Browser Anda tidak mendukung video HTML5.
+        </video>
+        <div class="player-controls" style="opacity: 1;">
+          <div class="controls-bar">
+            <button class="control-btn play-pause" onclick="this.querySelector('svg').innerHTML = this.querySelector('video')?.paused ? '<polygon points=\"5 3 19 12 5 21 5 3\"/>' : '<rect x=\"6\" y=\"4\" width=\"4\" height=\"16\"/><rect x=\"14\" y=\"4\" width=\"4\" height=\"16\"/>'">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="black"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <div class="progress-bar" style="flex: 1; height: 4px; background: var(--bg-tertiary); border-radius: var(--radius-full); cursor: pointer;">
+              <div class="progress-fill" style="height: 100%; background: var(--text-accent); border-radius: var(--radius-full); width: 30%;"></div>
+            </div>
+            <span class="time">12:34 / 2:15:23</span>
+            <button class="control-btn" aria-label="Fullscreen"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="8" height="8" rx="2"/><rect x="14" y="2" width="8" height="8" rx="2"/><rect x="2" y="14" width="8" height="8" rx="2"/><rect x="14" y="14" width="8" height="8" rx="2"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  document.body.style.overflow = 'hidden';
+  
+  // Focus the video
+  setTimeout(() => {
+    document.querySelector('#playerModal video')?.focus();
+  }, 100);
+  
+  // Close on Escape
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      document.getElementById('playerModal')?.remove();
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleEscape);
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
+}
+
+/* Search */
+function initSearch() {
+  const searchInput = document.querySelector('.search-box input');
+  if (searchInput) {
+    let debounceTimer;
+    searchInput.addEventListener('input', (e) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const query = e.target.value.trim();
+        if (query.length >= 2) {
+          showSearchResults(query);
+        }
+      }, 300);
+    });
+    
+    searchInput.addEventListener('focus', () => {
+      searchInput.parentElement.style.zIndex = '100';
+    });
+    
+    searchInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        searchInput.parentElement.style.zIndex = '';
+      }, 200);
+    });
+  }
+}
+
+function showSearchResults(query) {
+  // In real app, this would fetch from API
+  console.log('Searching for:', query);
+}
+
+/* Keyboard Navigation */
+function initKeyboardNavigation() {
+  document.addEventListener('keydown', (e) => {
+    // Escape closes modals/sidebar
+    if (e.key === 'Escape') {
+      closeModal();
+      closeSidebar();
+      document.getElementById('playerModal')?.remove();
+      document.body.style.overflow = '';
+    }
+    
+    // Ctrl/Cmd + K for search
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      document.querySelector('.search-box input')?.focus();
+    }
+    
+    // Alt + 1-5 for quick nav
+    if (e.altKey && e.key >= '1' && e.key <= '5') {
+      e.preventDefault();
+      const pages = ['home', 'movies', 'series', 'anime', 'drakor'];
+      navigateTo(pages[parseInt(e.key) - 1]);
+    }
+  });
+}
+
+/* Responsive */
+function handleResize() {
+  const isMobile = window.innerWidth <= 1024;
+  const isTV = window.innerWidth >= 1920 && window.matchMedia('(pointer: coarse)').matches;
+  
+  // Close sidebar on desktop resize
+  if (!isMobile && state.sidebarOpen) {
+    closeSidebar();
+  }
+  
+  // Update grid columns via CSS (handled by CSS Grid auto-fill)
+  
+  // Adjust hero height for TV
+  const hero = document.querySelector('.hero');
+  if (hero) {
+    hero.style.minHeight = isTV ? '500px' : '360px';
+  }
+}
+
+/* Utility: Smooth scroll polyfill for older browsers */
+if (!('scrollBehavior' in document.documentElement.style)) {
+  const smoothScroll = (target, duration) => {
+    const start = window.pageYOffset;
+    const distance = target.getBoundingClientRect().top;
+    const startTime = performance.now();
+    
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = progress < 0.5 
+        ? 2 * progress * progress 
+        : -1 + (4 - 2 * progress) * progress;
+      
+      window.scrollTo(0, start + distance * ease);
+      
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    
+    requestAnimationFrame(animate);
+  };
+  
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) smoothScroll(target, 500);
+    });
+  });
+}
+
+// Expose for debugging
+window.AdiXtream = {
+  showToast,
+  navigateTo,
+  toggleSidebar,
+  state
+};
+</script>
+</body>
+</html>

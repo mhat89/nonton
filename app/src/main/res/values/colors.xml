@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors - Netflix-style Red -->
+    <color name="brand_primary">#E50914</color>
+    <color name="brand_primary_dark">#B80710</color>
+    <color name="brand_primary_light">#FF4B4B</color>
+    <color name="brand_secondary">#221F1F</color>
+    <color name="brand_accent">#FFD700</color>
+
+    <!-- Background Colors -->
+    <color name="bg_primary">#0D0D0D</color>
+    <color name="bg_secondary">#1A1A1A</color>
+    <color name="bg_tertiary">#262626</color>
+    <color name="bg_card">#1E1E1E</color>
+    <color name="bg_card_hover">#2A2A2A</color>
+    <color name="bg_modal">#000000E6</color>
+    <color name="bg_hero_start">#1A1A2E</color>
+    <color name="bg_hero_mid">#16213E</color>
+    <color name="bg_hero_end">#0F3460</color>
+
+    <!-- Surface Colors -->
+    <color name="surface_primary">#1A1A1A</color>
+    <color name="surface_secondary">#262626</color>
+    <color name="surface_variant">#2A2A2A</color>
+    <color name="surface_hover">#333333</color>
+    <color name="surface_disabled">#1A1A1A</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3B3B3</color>
+    <color name="text_tertiary">#737373</color>
+    <color name="text_disabled">#4A4A4A</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_on_secondary">#FFFFFF</color>
+    <color name="text_on_background">#FFFFFF</color>
+    <color name="text_on_surface">#FFFFFF</color>
+    <color name="text_inverse">#0D0D0D</color>
+
+    <!-- Border Colors -->
+    <color name="border_primary">#333333</color>
+    <color name="border_secondary">#404040</color>
+    <color name="border_focus">#E50914</color>
+    <color name="border_error">#EF4444</color>
+
+    <!-- Status Colors -->
+    <color name="status_success">#22C55E</color>
+    <color name="status_warning">#F59E0B</color>
+    <color name="status_error">#EF4444</color>
+    <color name="status_info">#3B82F6</color>
+
+    <!-- Rating Colors -->
+    <color name="rating_gold">#FFD700</color>
+    <color name="rating_green">#22C55E</color>
+    <color name="rating_orange">#F59E0B</color>
+    <color name="rating_red">#EF4444</color>
+
+    <!-- Genre Colors -->
+    <color name="genre_action">#EF4444</color>
+    <color name="genre_drama">#8B5CF6</color>
+    <color name="genre_comedy">#F59E0B</color>
+    <color name="genre_thriller">#EC4899</color>
+    <color name="genre_horror">#7F1D1D</color>
+    <color name="genre_romance">#F472B6</color>
+    <color name="genre_scifi">#06B6D4</color>
+    <color name="genre_fantasy">#A855F7</color>
+    <color name="genre_animation">#22D3EE</color>
+    <color name="genre_documentary">#64748B</color>
+
+    <!-- State Colors -->
+    <color name="state_hover">#FFFFFF1A</color>
+    <color name="state_pressed">#FFFFFF26</color>
+    <color name="state_focus">#E509144D</color>
+    <color name="state_disabled">#FFFFFF0D</color>
+    <color name="state_dragged">#E5091433</color>
+
+    <!-- Shadow Colors -->
+    <color name="shadow_ambient">#0000004D</color>
+    <color name="shadow_spot">#00000033</color>
+    <color name="shadow_elevation_1">#0000001F</color>
+    <color name="shadow_elevation_2">#00000033</color>
+    <color name="shadow_elevation_4">#0000004D</color>
+    <color name="shadow_elevation_8">#00000066</color>
+    <color name="shadow_elevation_16">#00000080</color>
+    <color name="shadow_elevation_24">#00000099</color>
+
+    <!-- Overlay Colors -->
+    <color name="overlay_light">#FFFFFF1A</color>
+    <color name="overlay_medium">#00000080</color>
+    <color name="overlay_heavy">#000000CC</color>
+    <color name="overlay_modal">#000000E6</color>
+
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#1A1A2E</color>
+    <color name="gradient_mid">#16213E</color>
+    <color name="gradient_end">#0F3460</color>
+    <color name="gradient_red_start">#E50914</color>
+    <color name="gradient_red_end">#B80710</color>
+
+    <!-- TV Specific -->
+    <color name="tv_focus_ring">#E50914</color>
+    <color name="tv_selection_bg">#E5091433</color>
+
+    <!-- Material3 Color Scheme Mapping -->
+    <color name="md_sys_color_primary">#E50914</color>
+    <color name="md_sys_color_on_primary">#FFFFFF</color>
+    <color name="md_sys_color_primary_container">#2D0004</color>
+    <color name="md_sys_color_on_primary_container">#FFDAD6</color>
+    <color name="md_sys_color_secondary">#E50914</color>
+    <color name="md_sys_color_on_secondary">#FFFFFF</color>
+    <color name="md_sys_color_secondary_container">#2D0004</color>
+    <color name="md_sys_color_on_secondary_container">#FFDAD6</color>
+    <color name="md_sys_color_tertiary">#FFD700</color>
+    <color name="md_sys_color_on_tertiary">#0D0D0D</color>
+    <color name="md_sys_color_tertiary_container">#1A0D00</color>
+    <color name="md_sys_color_on_tertiary_container">#FFD700</color>
+    <color name="md_sys_color_error">#EF4444</color>
+    <color name="md_sys_color_on_error">#FFFFFF</color>
+    <color name="md_sys_color_error_container">#4B0000</color>
+    <color name="md_sys_color_on_error_container">#FFDAD6</color>
+    <color name="md_sys_color_background">#0D0D0D</color>
+    <color name="md_sys_color_on_background">#FFFFFF</color>
+    <color name="md_sys_color_surface">#1A1A1A</color>
+    <color name="md_sys_color_on_surface">#FFFFFF</color>
+    <color name="md_sys_color_surface_variant">#2A2A2A</color>
+    <color name="md_sys_color_on_surface_variant">#B3B3B3</color>
+    <color name="md_sys_color_outline">#333333</color>
+    <color name="md_sys_color_outline_variant">#404040</color>
+    <color name="md_sys_color_shadow">#000000</color>
+    <color name="md_sys_color_scrim">#000000</color>
+    <color name="md_sys_color_inverse_surface">#E6E1E5</color>
+    <color name="md_sys_color_inverse_on_surface">#1A1A1A</color>
+    <color name="md_sys_color_inverse_primary">#FF4B4B</color>
+    <color name="md_sys_color_surface_tint">#E50914</color>
+</resources>

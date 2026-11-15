@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <!-- Background -->
+    <path
+        android:fillColor="#0D0D0D"
+        android:pathData="M0,0h320v180h-320z" />
+    <!-- Gradient Overlay -->
+    <path
+        android:fillColor="#E50914"
+        android:pathData="M0,0h320v180h-320z"
+        android:fillAlpha="0.1" />
+    <!-- Logo -->
+    <path
+        android:fillColor="#E50914"
+        android:pathData="M100,40l60,50l-60,50z" />
+    <!-- Text "Nonton" -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M170,55h80v15h-80z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M170,75h50v15h-50z M170,75h20v40h-20z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M225,55h30v35h-30z M225,75h30v15h-30z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M260,55h25v35h-25z M260,75h25v15h-25z M260,95h25v15h-25z" />
+</vector>

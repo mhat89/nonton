@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base Application Theme - Using Material Components (Material2) for XML themes -->
+    <style name="Theme.Nonton" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary Brand Color -->
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorPrimaryVariant">@color/brand_primary_dark</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+
+        <!-- Secondary Brand Color -->
+        <item name="colorSecondary">@color/brand_primary</item>
+        <item name="colorSecondaryVariant">@color/brand_primary_dark</item>
+        <item name="colorOnSecondary">@color/text_on_primary</item>
+
+        <!-- Tertiary Brand Color (using secondary for Material2) -->
+        <item name="colorTertiary">@color/brand_accent</item>
+        <item name="colorOnTertiary">@color/text_inverse</item>
+
+        <!-- Background & Surface -->
+        <item name="android:colorBackground">@color/bg_primary</item>
+        <item name="colorSurface">@color/surface_primary</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurface">@color/text_on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/status_error</item>
+        <item name="colorOnError">@color/text_on_primary</item>
+
+        <!-- Status Bar & Navigation Bar -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <!-- Window -->
+        <item name="android:windowBackground">@color/bg_primary</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- Splash Screen -->
+        <item name="android:windowSplashScreenBackground">@color/bg_primary</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="android:windowSplashScreenAnimationDuration">300</item>
+    </style>
+
+    <!-- TV Theme -->
+    <style name="Theme.Nonton.TV" parent="Theme.Nonton">
+        <item name="android:windowBackground">@color/bg_primary</item>
+        <item name="colorSurface">@color/surface_primary</item>
+    </style>
+
+    <!-- TV Player Theme -->
+    <style name="Theme.Nonton.TV.Player" parent="Theme.Nonton.TV">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- TV Search Theme -->
+    <style name="Theme.Nonton.TV.Search" parent="Theme.Nonton.TV">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <!-- Tablet Theme -->
+    <style name="Theme.Nonton.Tablet" parent="Theme.Nonton">
+        <item name="android:windowBackground">@color/bg_primary</item>
+    </style>
+
+    <!-- Tablet Player Theme -->
+    <style name="Theme.Nonton.Tablet.Player" parent="Theme.Nonton.Tablet">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <!-- Player Theme -->
+    <style name="Theme.Nonton.Player" parent="Theme.Nonton">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/bg_primary</item>
+        <item name="colorSurface">@color/bg_primary</item>
+    </style>
+
+    <!-- Settings Theme -->
+    <style name="Theme.Nonton.Settings" parent="Theme.Nonton">
+        <item name="android:windowBackground">@color/bg_primary</item>
+    </style>
+
+    <!-- Detail Theme -->
+    <style name="Theme.Nonton.Detail" parent="Theme.Nonton">
+        <item name="android:windowBackground">@color/bg_primary</item>
+    </style>
+
+    <!-- Search Theme -->
+    <style name="Theme.Nonton.Search" parent="Theme.Nonton">
+        <item name="android:windowBackground">@color/bg_primary</item>
+    </style>
+
+    <!-- Splash Theme -->
+    <style name="Theme.Nonton.Splash" parent="Theme.Nonton">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- Dialog -->
+    <style name="Theme.Nonton.Dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/surface_primary</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+    </style>
+
+    <!-- Bottom Sheet -->
+    <style name="Widget.Nonton.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+    </style>
+
+    <!-- Tooltip -->
+    <style name="Widget.Nonton.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="backgroundTint">@color/surface_secondary</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <!-- Snackbar -->
+    <style name="Widget.Nonton.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint">@color/surface_secondary</item>
+    </style>
+</resources>

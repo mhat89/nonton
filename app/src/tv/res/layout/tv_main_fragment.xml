@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.leanback.widget.VerticalGridView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/vertical_grid_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_primary"
+    android:clipToPadding="false"
+    android:paddingTop="96dp"
+    android:paddingBottom="48dp"
+    android:paddingStart="48dp"
+    android:paddingEnd="48dp"
+    android:verticalSpacing="48dp"
+    android:horizontalSpacing="24dp"
+    android:numColumns="auto_fit"
+    android:stretchMode="columnWidth"
+    android:columnWidth="280dp"
+    android:scrollbarStyle="outsideOverlay"
+    android:scrollbars="vertical"
+    android:requiresFadingEdge="vertical"
+    android:fadingEdgeLength="96dp" />

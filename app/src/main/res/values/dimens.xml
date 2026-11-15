@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing -->
+    <dimen name="spacing_xxs">2dp</dimen>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">16dp</dimen>
+    <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+    <dimen name="spacing_2xl">48dp</dimen>
+    <dimen name="spacing_3xl">64dp</dimen>
+
+    <!-- Component Sizes -->
+    <dimen name="icon_size_xs">16dp</dimen>
+    <dimen name="icon_size_sm">20dp</dimen>
+    <dimen name="icon_size_md">24dp</dimen>
+    <dimen name="icon_size_lg">28dp</dimen>
+    <dimen name="icon_size_xl">32dp</dimen>
+    <dimen name="icon_size_2xl">48dp</dimen>
+
+    <dimen name="button_height_sm">36dp</dimen>
+    <dimen name="button_height_md">44dp</dimen>
+    <dimen name="button_height_lg">56dp</dimen>
+    <dimen name="button_height_xl">64dp</dimen>
+
+    <dimen name="input_height_sm">36dp</dimen>
+    <dimen name="input_height_md">48dp</dimen>
+    <dimen name="input_height_lg">56dp</dimen>
+
+    <dimen name="card_corner_radius_sm">8dp</dimen>
+    <dimen name="card_corner_radius_md">12dp</dimen>
+    <dimen name="card_corner_radius_lg">16dp</dimen>
+    <dimen name="card_corner_radius_xl">24dp</dimen>
+
+    <dimen name="chip_height_sm">28dp</dimen>
+    <dimen name="chip_height_md">36dp</dimen>
+    <dimen name="chip_height_lg">44dp</dimen>
+
+    <!-- Movie Card -->
+    <dimen name="movie_card_width_phone">160dp</dimen>
+    <dimen name="movie_card_width_tablet">180dp</dimen>
+    <dimen name="movie_card_width_tv">280dp</dimen>
+    <dimen name="movie_card_aspect_ratio">1.5</dimen>
+
+    <dimen name="hero_banner_height_phone">280dp</dimen>
+    <dimen name="hero_banner_height_tablet">350dp</dimen>
+    <dimen name="hero_banner_height_tv">400dp</dimen>
+
+    <!-- Spacing -->
+    <dimen name="screen_margin_phone">16dp</dimen>
+    <dimen name="screen_margin_tablet">24dp</dimen>
+    <dimen name="screen_margin_tv">48dp</dimen>
+
+    <dimen name="section_spacing_phone">16dp</dimen>
+    <dimen name="section_spacing_tablet">24dp</dimen>
+    <dimen name="section_spacing_tv">48dp</dimen>
+
+    <dimen name="item_spacing_phone">12dp</dimen>
+    <dimen name="item_spacing_tablet">16dp</dimen>
+    <dimen name="item_spacing_tv">24dp</dimen>
+
+    <!-- Player -->
+    <dimen name="player_controls_height">120dp</dimen>
+    <dimen name="player_progress_height">4dp</dimen>
+    <dimen name="player_control_button_size">44dp</dimen>
+    <dimen name="player_play_button_size">56dp</dimen>
+
+    <!-- TV Specific -->
+    <dimen name="tv_screen_margin">48dp</dimen>
+    <dimen name="tv_hero_height">400dp</dimen>
+    <dimen name="tv_movie_card_width">280dp</dimen>
+    <dimen name="tv_section_spacing">48dp</dimen>
+    <dimen name="tv_item_spacing">24dp</dimen>
+    <dimen name="tv_button_height">56dp</dimen>
+    <dimen name="tv_button_min_width">120dp</dimen>
+    <dimen name="tv_focus_border_width">3dp</dimen>
+
+    <!-- Tab Bar -->
+    <dimen name="tab_bar_height_phone">56dp</dimen>
+    <dimen name="tab_bar_height_tablet">64dp</dimen>
+    <dimen name="tab_bar_height_tv">72dp</dimen>
+    <dimen name="tab_icon_size_phone">24dp</dimen>
+    <dimen name="tab_icon_size_tablet">28dp</dimen>
+    <dimen name="tab_icon_size_tv">32dp</dimen>
+
+    <!-- Search -->
+    <dimen name="search_bar_height_phone">48dp</dimen>
+    <dimen name="search_bar_height_tablet">56dp</dimen>
+    <dimen name="search_bar_height_tv">64dp</dimen>
+
+    <!-- Settings -->
+    <dimen name="settings_item_height">56dp</dimen>
+    <dimen name="settings_section_spacing">24dp</dimen>
+
+    <!-- Download -->
+    <dimen name="download_item_height">72dp</dimen>
+    <dimen name="download_progress_height">4dp</dimen>
+
+    <!-- Margins -->
+    <dimen name="margin_xxs">2dp</dimen>
+    <dimen name="margin_xs">4dp</dimen>
+    <dimen name="margin_sm">8dp</dimen>
+    <dimen name="margin_md">16dp</dimen>
+    <dimen name="margin_lg">24dp</dimen>
+    <dimen name="margin_xl">32dp</dimen>
+    <dimen name="margin_2xl">48dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="padding_xxs">2dp</dimen>
+    <dimen name="padding_xs">4dp</dimen>
+    <dimen name="padding_sm">8dp</dimen>
+    <dimen name="padding_md">16dp</dimen>
+    <dimen name="padding_lg">24dp</dimen>
+    <dimen name="padding_xl">32dp</dimen>
+    <dimen name="padding_2xl">48dp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="elevation_none">0dp</dimen>
+    <dimen name="elevation_1">1dp</dimen>
+    <dimen name="elevation_2">2dp</dimen>
+    <dimen name="elevation_4">4dp</dimen>
+    <dimen name="elevation_8">8dp</dimen>
+    <dimen name="elevation_16">16dp</dimen>
+    <dimen name="elevation_24">24dp</dimen>
+
+    <!-- Border -->
+    <dimen name="border_width_thin">1dp</dimen>
+    <dimen name="border_width_normal">2dp</dimen>
+    <dimen name="border_width_focus">3dp</dimen>
+
+    <!-- Typography Scale -->
+    <dimen name="text_size_xxs">10sp</dimen>
+    <dimen name="text_size_xs">12sp</dimen>
+    <dimen name="text_size_sm">14sp</dimen>
+    <dimen name="text_size_base">16sp</dimen>
+    <dimen name="text_size_lg">18sp</dimen>
+    <dimen name="text_size_xl">20sp</dimen>
+    <dimen name="text_size_2xl">24sp</dimen>
+    <dimen name="text_size_3xl">30sp</dimen>
+    <dimen name="text_size_4xl">36sp</dimen>
+    <dimen name="text_size_5xl">48sp</dimen>
+
+    <!-- TV Typography -->
+    <dimen name="tv_text_size_xs">16sp</dimen>
+    <dimen name="tv_text_size_sm">18sp</dimen>
+    <dimen name="tv_text_size_base">20sp</dimen>
+    <dimen name="tv_text_size_lg">24sp</dimen>
+    <dimen name="tv_text_size_xl">28sp</dimen>
+    <dimen name="tv_text_size_2xl">36sp</dimen>
+    <dimen name="tv_text_size_3xl">48sp</dimen>
+    <dimen name="tv_text_size_4xl">60sp</dimen>
+</resources>

@@ -1,0 +1,30 @@
+# Local configuration - Copy to gradle.properties.local and customize
+# This file should NOT be committed to version control
+
+# API Configuration
+# API_BASE_URL=https://your-api-server.com/v1/
+
+# For development with mock API
+# API_BASE_URL=https://mock-api.example.com/v1/
+
+# Signing Config (for release builds)
+# STORE_FILE=../keystore/release.jks
+# STORE_PASSWORD=your_store_password
+# KEY_ALIAS=your_key_alias
+# KEY_PASSWORD=your_key_password
+
+# Google Play Console
+# PLAY_SERVICE_ACCOUNT_JSON=../secrets/play-service-account.json
+
+# Firebase
+# FIREBASE_CONFIG_JSON=../secrets/firebase-config.json
+
+# Crashlytics
+# CRASHLYTICS_API_KEY=your_crashlytics_key
+
+# Analytics
+# GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
+
+# OneSignal
+# ONESIGNAL_APP_ID=your_onesignal_app_id
+# ONESIGNAL_API_KEY=your_onesignal_api_key

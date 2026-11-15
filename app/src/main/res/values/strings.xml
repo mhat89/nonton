@@ -1,0 +1,221 @@
+<resources>
+    <string name="app_name">Nonton</string>
+    <string name="app_name_short">Nonton</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Beranda</string>
+    <string name="nav_movies">Film</string>
+    <string name="nav_series">Series</string>
+    <string name="nav_anime">Anime</string>
+    <string name="nav_drakor">Drakor</string>
+    <string name="nav_live">Live TV</string>
+    <string name="nav_continue">Lanjutkan Menonton</string>
+    <string name="nav_watchlist">Watchlist</string>
+    <string name="nav_downloads">Download</string>
+    <string name="nav_settings">Pengaturan</string>
+
+    <!-- Categories -->
+    <string name="category_action">Action</string>
+    <string name="category_drama">Drama</string>
+    <string name="category_comedy">Comedy</string>
+    <string name="category_thriller">Thriller</string>
+    <string name="category_horror">Horror</string>
+    <string name="category_romance">Romance</string>
+    <string name="category_scifi">Sci-Fi</string>
+    <string name="category_fantasy">Fantasy</string>
+    <string name="category_animation">Animation</string>
+    <string name="category_documentary">Documentary</string>
+    <string name="category_family">Family</string>
+    <string name="category_mystery">Mystery</string>
+    <string name="category_crime">Crime</string>
+
+    <!-- Sections -->
+    <string name="section_continue_watching">Lanjutkan Menonton</string>
+    <string name="section_trending_movies">Trending Film</string>
+    <string name="section_popular_series">Series Populer</string>
+    <string name="section_popular_drakor">Drakor Terbaru</string>
+    <string name="section_popular_anime">Anime Populer</string>
+    <string name="section_top_rated">Rating Tertinggi</string>
+    <string name="section_new_releases">Rilis Baru</string>
+    <string name="section_live_channels">Live TV</string>
+    <string name="section_recommendations">Rekomendasi Untukmu</string>
+    <string name="section_similar">Serupa</string>
+    <string name="section_watchlist">Watchlist</string>
+    <string name="section_downloads">Download Saya</string>
+
+    <!-- Actions -->
+    <string name="action_play">Putar Sekarang</string>
+    <string name="action_play_next">Putar Berikutnya</string>
+    <string name="action_resume">Lanjutkan</string>
+    <string name="action_restart">Mulai Ulang</string>
+    <string name="action_download">Download</string>
+    <string name="action_downloading">Mengunduh…</string>
+    <string name="action_downloaded">Terunduh</string>
+    <string name="action_remove_download">Hapus Download</string>
+    <string name="action_add_watchlist">Tambah ke Watchlist</string>
+    <string name="action_remove_watchlist">Hapus dari Watchlist</string>
+    <string name="action_share">Bagikan</string>
+    <string name="action_more">Lainnya</string>
+    <string name="action_see_all">Lihat Semua</string>
+    <string name="action_refresh">Muat Ulang</string>
+    <string name="action_search">Cari</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_sort">Urutkan</string>
+
+    <!-- Player -->
+    <string name="player_play">Putar</string>
+    <string name="player_pause">Jeda</string>
+    <string name="player_rewind_10">Mundur 10s</string>
+    <string name="player_forward_30">Maju 30s</string>
+    <string name="player_fullscreen">Layar Penuh</string>
+    <string name="player_exit_fullscreen">Keluar Layar Penuh</string>
+    <string name="player_pip">Picture in Picture</string>
+    <string name="player_quality">Kualitas</string>
+    <string name="player_speed">Kecepatan</string>
+    <string name="player_audio">Audio</string>
+    <string name="player_subtitle">Subtitle</string>
+    <string name="player_cast">Cast ke TV</string>
+    <string name="player_episodes">Episode</string>
+    <string name="player_next_episode">Episode Berikutnya</string>
+    <string name="player_previous_episode">Episode Sebelumnya</string>
+    <string name="player_sleep_timer">Timer Tidur</string>
+
+    <!-- Quality -->
+    <string name="quality_auto">Otomatis</string>
+    <string name="quality_4k">4K (2160p)</string>
+    <string name="quality_1080p">1080p</string>
+    <string name="quality_720p">720p</string>
+    <string name="quality_480p">480p</string>
+    <string name="quality_360p">360p</string>
+    <string name="quality_audio_only">Audio Saja</string>
+
+    <!-- Speed -->
+    <string name="speed_0_5">0.5x</string>
+    <string name="speed_0_75">0.75x</string>
+    <string name="speed_1">Normal (1x)</string>
+    <string name="speed_1_25">1.25x</string>
+    <string name="speed_1_5">1.5x</string>
+    <string name="speed_2">2x</string>
+
+    <!-- Status -->
+    <string name="status_loading">Memuat…</string>
+    <string name="status_error">Terjadi kesalahan</string>
+    <string name="status_no_internet">Tidak ada koneksi internet</string>
+    <string name="status_no_results">Tidak ada hasil</string>
+    <string name="status_empty_watchlist">Watchlist kosong</string>
+    <string name="status_empty_downloads">Belum ada download</string>
+    <string name="status_empty_continue">Belum ada riwayat tontonan</string>
+
+    <!-- Search -->
+    <string name="search_hint">Cari film, series, anime…</string>
+    <string name="search_recent">Pencarian Terbaru</string>
+    <string name="search_popular">Populer</string>
+    <string name="search_clear">Hapus Riwayat</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_general">Umum</string>
+    <string name="settings_video">Video</string>
+    <string name="settings_download">Download</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="settings_parental">Kontrol Orang Tua</string>
+    <string name="settings_account">Akun</string>
+    <string name="settings_about">Tentang</string>
+
+    <!-- Video Settings -->
+    <string name="settings_video_quality">Kualitas Streaming</string>
+    <string name="settings_download_quality">Kualitas Download</string>
+    <string name="settings_auto_play_next">Putar Otomatis Episode Berikutnya</string>
+    <string name="settings_pip_enabled">Picture in Picture</string>
+    <string name="settings_data_saver">Hemat Data</string>
+
+    <!-- Download Settings -->
+    <string name="settings_download_wifi_only">Download Hanya di Wi-Fi</string>
+    <string name="settings_max_concurrent">Maksimal Download Bersamaan</string>
+    <string name="settings_delete_after_watch">Hapus Setelah Ditonton</string>
+
+    <!-- Language Settings -->
+    <string name="settings_audio_language">Bahasa Audio</string>
+    <string name="settings_subtitle_language">Bahasa Subtitle</string>
+    <string name="settings_subtitle_size">Ukuran Subtitle</string>
+    <string name="settings_subtitle_color">Warna Subtitle</string>
+
+    <!-- Language Options -->
+    <string name="lang_indonesian">Indonesia</string>
+    <string name="lang_english">English</string>
+    <string name="lang_korean">한국어</string>
+    <string name="lang_japanese">日本語</string>
+    <string name="lang_chinese">中文</string>
+
+    <!-- Parental Control -->
+    <string name="settings_parental_control">Kontrol Orang Tua</string>
+    <string name="settings_set_pin">Atur PIN</string>
+    <string name="settings_change_pin">Ubah PIN</string>
+    <string name="settings_content_rating">Rating Konten</string>
+
+    <!-- Account -->
+    <string name="settings_sign_in">Masuk</string>
+    <string name="settings_sign_out">Keluar</string>
+    <string name="settings_profile">Profil</string>
+<string name="settings_sync">Sinkronkan Data</string>
+
+    <!-- About -->
+    <string name="settings_version">Versi</string>
+    <string name="settings_privacy">Kebijakan Privasi</string>
+    <string name="settings_licenses">Lisensi Open Source</string>
+    <string name="settings_contact">Hubungi Kami</string>
+    <string name="settings_feedback">Kirim Feedback</string>
+    <string name="settings">Pengaturan</string>
+    <string name="search">Cari</string>
+    <string name="detail">Detail</string>
+
+    <!-- Errors -->
+    <string name="error_generic">Terjadi kesalahan. Silakan coba lagi.</string>
+    <string name="error_network">Koneksi jaringan bermasalah</string>
+    <string name="error_server">Server tidak merespons</string>
+    <string name="error_timeout">Waktu habis. Coba lagi.</string>
+    <string name="error_unauthorized">Sesi berakhir. Silakan masuk lagi.</string>
+    <string name="error_forbidden">Akses ditolak</string>
+    <string name="error_not_found">Konten tidak ditemukan</string>
+    <string name="error_playback">Gagal memutar video</string>
+    <string name="error_download_failed">Download gagal</string>
+    <string name="error_insufficient_storage">Penyimpanan penuh</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_confirm_title">Konfirmasi</string>
+    <string name="dialog_delete_title">Hapus?</string>
+    <string name="dialog_delete_message">Apakah Anda yakin ingin menghapus item ini?</string>
+    <string name="dialog_clear_cache_title">Bersihkan Cache?</string>
+    <string name="dialog_clear_cache_message">Ini akan menghapus data sementara dan mungkin memperlambat pemuatan awal.</string>
+    <string name="dialog_sign_out_title">Keluar?</string>
+    <string name="dialog_sign_out_message">Apakah Anda yakin ingin keluar dari akun ini?</string>
+    <string name="dialog_cancel">Batal</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_yes">Ya</string>
+    <string name="dialog_no">Tidak</string>
+    <string name="dialog_retry">Coba Lagi</string>
+
+    <!-- Accessibility -->
+    <string name="a11y_movie_poster_generic">Poster film</string>
+    <string name="a11y_movie_poster">Poster %s</string>
+    <string name="a11y_play_button">Putar %s</string>
+    <string name="a11y_add_watchlist">Tambah %s ke watchlist</string>
+    <string name="a11y_remove_watchlist">Hapus %s dari watchlist</string>
+    <string name="a11y_download">Download %s</string>
+    <string name="a11y_share">Bagikan %s</string>
+    <string name="a11y_episode">Episode %1$d, %2$s</string>
+    <string name="a11y_season">Season %d</string>
+    <string name="a11y_rating">Rating %s dari 10</string>
+    <string name="a11y_duration">Durasi %s</string>
+    <string name="a11y_year">Tahun %s</string>
+    <string name="a11y_genre">Genre %s</string>
+
+    <!-- TV Specific -->
+    <string name="tv_open_search">Buka Pencarian</string>
+    <string name="tv_continue_watching">Lanjutkan Menonton</string>
+    <string name="tv_watch_now">Tonton Sekarang</string>
+    <string name="tv_watch_trailer">Tonton Trailer</string>
+    <string name="tv_more_info">Info Lebih Lanjut</string>
+    <string name="tv_episodes">Episode</string>
+    <string name="tv_seasons">Season</string>
+</resources>

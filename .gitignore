@@ -1,0 +1,90 @@
+# Gradle
+.gradle/
+build/
+*/build/
+*/build/
+!buildSrc/
+
+# Local configuration file (sdk path, etc)
+local.properties
+gradle.properties.local
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+*.classpath
+*.project
+.settings/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Android
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+*.o
+*.so
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Kotlin
+*.kt.metadata
+
+# Generated
+generated/
+out/
+output/
+*.generated.*
+
+# Test
+test-results/
+coverage/
+*.ec
+
+# Logs
+*.log
+
+# Cache
+.cache/
+*.cache
+
+# Temporary
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Keystore
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDEA
+*.ipr
+*.iml
+*.iws
+.idea/
+
+# Gradle
+.gradle/
+build/
+
+# NDK
+obj/
